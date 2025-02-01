@@ -5,11 +5,26 @@ description = ""
 authors = [
     {name = "Dmitriy Zhukovskiy",email = "drzhukovskiy@edu.hse.ru"}
 ]
+packages = [
+    { include = "./backend" },
+]
 readme = "README.md"
+
+[project.scripts]
+academia = 'backend.cli:app'
+
 requires-python = ">=3.12"
 dependencies = [
+    "pydantic-settings (>=2.7.1,<3.0.0)",
+    "pydantic (>=2.10.6,<3.0.0)",
+    "setuptools (>=75.8.0,<76.0.0)",
+    "typer (>=0.15.1,<0.16.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "fastapi (>=0.115.8,<0.116.0)",
+    "asyncpg (>=0.30.0,<0.31.0)",
+    "sqlalchemy[asyncio,postgresql-psycopgbinary] (>=2.0.37,<3.0.0)",
+    "sqlalchemy-utils (>=0.41.2,<0.42.0)",
 ]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
