@@ -5,13 +5,7 @@ description = ""
 authors = [
     {name = "Dmitriy Zhukovskiy",email = "drzhukovskiy@edu.hse.ru"}
 ]
-packages = [
-    { include = "./backend" },
-]
 readme = "README.md"
-
-[project.scripts]
-academia = 'backend.cli:app'
 
 requires-python = ">=3.12"
 dependencies = [
@@ -24,6 +18,14 @@ dependencies = [
     "asyncpg (>=0.30.0,<0.31.0)",
     "sqlalchemy[asyncio,postgresql-psycopgbinary] (>=2.0.37,<3.0.0)",
     "sqlalchemy-utils (>=0.41.2,<0.42.0)",
+]
+
+[project.scripts]
+academia = 'backend.cli:app'
+
+[tool.poetry]
+packages = [
+    { include = "./backend" },
 ]
 
 [build-system]
