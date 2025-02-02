@@ -2,8 +2,7 @@ import typer
 import uvicorn
 
 from backend.api.config import ServerSettings
-from backend.db.base import Base
-from backend.db.config import DBSettings
+from backend.db.base import Base, engine
 
 backend_app = typer.Typer(short_help="Запуск backend-приложения")
 
@@ -16,7 +15,7 @@ def launch_backend():
             # TODO потом удалить, импорт будет не нужен
             from backend.db import models
 
-            async with DBSettings().engine.begin() as conn:
+            async with engine.begin() as conn:
                 # await conn.run_sync(Base.metadata.drop_all)
                 await conn.run_sync(Base.metadata.create_all)
 

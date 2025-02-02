@@ -19,13 +19,18 @@ dependencies = [
     "sqlalchemy-utils (>=0.41.2,<0.42.0)",
     "pydantic[email] (>=2.10.6,<3.0.0)",
     "polyfactory (>=2.19.0,<3.0.0)",
+    "flask-admin[images,s3,sqlalchemy-with-utils,translation] (>=1.6.1,<2.0.0)",
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
+    "psycopg2 (>=2.9.10,<3.0.0)",
 ]
 
 [project.scripts]
+admin = 'admin.cli:app'
 academia = 'backend.cli:app'
 
 [tool.poetry]
 packages = [
+    { include = "./admin" },
     { include = "./backend" },
 ]
 
