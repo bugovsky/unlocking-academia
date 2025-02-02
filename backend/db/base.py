@@ -4,5 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from backend.db.config import DBSettings
 
 Base = declarative_base()
-engine = DBSettings().engine
+db_settings = DBSettings()
+engine = db_settings.engine
 Session = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)

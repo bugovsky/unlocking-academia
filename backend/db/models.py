@@ -45,9 +45,11 @@ class User(Base, HasID, Creatable):
 
     comments: so.Mapped[list["Comment"]] = so.relationship("Comment", back_populates="author", uselist=True)
     ratings: so.Mapped[list["Rating"]] = so.relationship("Rating", back_populates="user", uselist=True)
-    requests: so.Mapped[list["Request"]] = so.relationship("Request", back_populates="author", uselist=True)
+    requests: so.Mapped[list["Request"]] = so.relationship(
+        "Request", back_populates="author", uselist=True, foreign_keys="Request.author_id"
+    )
     responses: so.Mapped[list["Request"]] = so.relationship(
-        "Request", back_populates="recipient", uselist=True
+        "Request", back_populates="recipient", uselist=True, foreign_keys="Request.recipient_id"
     )
 
 
@@ -94,5 +96,5 @@ class Request(Base, HasID, Updatable):
     author_id: so.Mapped[UUID | None] = so.mapped_column(ForeignKey("users.id"), nullable=True)
     recipient_id: so.Mapped[UUID] = so.mapped_column(ForeignKey("users.id"))
 
-    author = so.relationship("User", back_populates="requests")
-    recipient = so.relationship("User", back_populates="responses")
+    author = so.relationship("User", back_populates="requests", foreign_keys=author_id)
+    recipient = so.relationship("User", back_populates="responses", foreign_keys=recipient_id)
