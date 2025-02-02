@@ -10,6 +10,7 @@ from sqlalchemy import func, ForeignKey
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from backend.db.base import Base
+from backend.schema.request import Type
 from backend.schema.user import Role, Domain
 
 
@@ -38,7 +39,9 @@ class User(Base, HasID, Creatable):
     email: so.Mapped[str] = so.mapped_column(sa.String(100), unique=True)
     password: so.Mapped[str] =  so.mapped_column(sa.String)
     role: so.Mapped[Role] = so.mapped_column(nullable=False)
-    domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())))
+    domain: so.Mapped[list[Domain] | None] = so.mapped_column(
+        sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())), nullable=True
+    )
 
     comments: so.Mapped[list["Comment"]] = so.relationship("Comment", back_populates="author", uselist=True)
     ratings: so.Mapped[list["Rating"]] = so.relationship("Rating", back_populates="user", uselist=True)
@@ -74,7 +77,7 @@ class Post(Base, HasID, Updatable, Deletable):
     __tablename__ = "posts"
 
     content: so.Mapped[str]
-    media_url: so.Mapped[list[str]] = so.mapped_column(sa.ARRAY(sa.String))
+    media_url: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
     domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())))
     views: so.Mapped[int] = so.mapped_column(default=0)
 
@@ -85,7 +88,9 @@ class Post(Base, HasID, Updatable, Deletable):
 class Request(Base, HasID, Updatable):
     __tablename__ = "requests"
 
-    content: so.Mapped[str] = so.mapped_column(nullable=False)
+    question: so.Mapped[str] = so.mapped_column(nullable=False)
+    response: so.Mapped[str] = so.mapped_column(nullable=True)
+    type: so.Mapped[Type] = so.mapped_column(nullable=False)
     author_id: so.Mapped[UUID | None] = so.mapped_column(ForeignKey("users.id"), nullable=True)
     recipient_id: so.Mapped[UUID] = so.mapped_column(ForeignKey("users.id"))
 
