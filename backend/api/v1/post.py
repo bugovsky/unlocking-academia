@@ -1,10 +1,8 @@
 from uuid import UUID
 
 from fastapi import APIRouter, status
-from sqlalchemy.dialects.mssql.information_schema import views
 
 from backend.schema.post import CreatePost, Post, UpdatePost
-from backend.schema.user import Domain
 from tests.factory.schema import PostFactory
 
 router = APIRouter()
