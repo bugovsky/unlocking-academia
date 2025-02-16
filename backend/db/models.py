@@ -1,5 +1,4 @@
 from datetime import datetime
-from tokenize import String
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
@@ -7,11 +6,11 @@ import sqlalchemy.orm as so
 import sqlalchemy_utils as su
 
 from sqlalchemy import func, ForeignKey
-from sqlalchemy.dialects.postgresql import ARRAY
 
 from backend.db.base import Base
+from backend.schema.base import Domain
 from backend.schema.request import Type
-from backend.schema.user import Role, Domain
+from backend.schema.user import Role
 
 
 @so.declarative_mixin
@@ -38,7 +37,7 @@ class User(Base, HasID, Creatable):
     lastname: so.Mapped[str] = so.mapped_column(sa.String(50))
     email: so.Mapped[str] = so.mapped_column(sa.String(100), unique=True)
     password: so.Mapped[str] =  so.mapped_column(sa.String)
-    role: so.Mapped[Role] = so.mapped_column(nullable=False)
+    role: so.Mapped[Role] = so.mapped_column(su.ChoiceType(Role, impl=sa.String()), nullable=False)
     domain: so.Mapped[list[Domain] | None] = so.mapped_column(
         sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())), nullable=True
     )

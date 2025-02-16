@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
-from backend.schema.user import Domain
+from backend.db.models import HasID
+from backend.schema.base import Domain
 
 
 class CreatePost(BaseModel):
@@ -14,7 +15,7 @@ class UpdatePost(BaseModel):
     domain: list[Domain]
     views: int = 0
 
-class Post(BaseModel):
+class Post(HasID):
     content: str
     media_url: list[str] | None = None
     domain: list[Domain]
