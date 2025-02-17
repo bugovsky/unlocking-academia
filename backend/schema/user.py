@@ -13,11 +13,9 @@ class Role(enum.StrEnum):
 
 
 class CreateUser(BaseModel):
-    firstname: str | None = None
-    lastname: str | None = None
     email: EmailStr
     password: SecretStr
-    role: Role = Role.STUDENT
+    role: Role = Field(Role.STUDENT, examples=[[Role.STUDENT, Role.EXPERT], None])
     domain: list[Domain] | None = Field(None, examples=[[Domain.CS, Domain.MATHEMATICS], None])
 
 
@@ -33,3 +31,7 @@ class User(HasID):
     email: EmailStr
     role: Role = Role.STUDENT
     domain: list[Domain] | None = Field(None, examples=[[Domain.CS, Domain.MATHEMATICS], None])
+
+
+class TryingToAuthUser(User):
+    password: SecretStr

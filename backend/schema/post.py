@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
-from backend.db.models import HasID
-from backend.schema.base import Domain
+from backend.schema.base import Domain, HasID
 
 
 class CreatePost(BaseModel):

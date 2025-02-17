@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from backend.db.models import HasID
+from backend.schema.base import HasID
 
 
 class Type(enum.StrEnum):
