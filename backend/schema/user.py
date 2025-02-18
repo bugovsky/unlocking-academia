@@ -15,7 +15,7 @@ class Role(enum.StrEnum):
 class CreateUser(BaseModel):
     email: EmailStr
     password: SecretStr
-    role: Role = Field(Role.STUDENT, examples=[[Role.STUDENT, Role.EXPERT], None])
+    role: Role = Field(Role.STUDENT, examples=[Role.STUDENT, Role.EXPERT, None])
     domain: list[Domain] | None = Field(None, examples=[[Domain.CS, Domain.MATHEMATICS], None])
 
 

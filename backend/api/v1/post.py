@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
 from backend.schema.post import CreatePost, Post, UpdatePost
 from backend.schema.user import User
@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=Post)
-async def create_post(post: CreatePost, user: Annotated[User, get_current_user]):
+async def create_post(post: CreatePost, user: Annotated[User, Depends(get_current_user)]):
     return Post(**post.model_dump())
 
 
