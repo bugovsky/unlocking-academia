@@ -18,5 +18,5 @@ async def login(
 ) -> Token:
     user = await auth_service.validate_credentials(email=form_data.username, password=form_data.password)
 
-    access_token = create_access_token(data={"sub": user.id})
+    access_token = create_access_token(data={"sub": str(user.id)})
     return Token(access_token=access_token, token_type="bearer")
