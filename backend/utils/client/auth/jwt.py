@@ -45,6 +45,6 @@ async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)]
 ) -> User:
     token_data = verify_access_token(token)
-    user = await user_service.get_user_by_id(user_id=token_data.id)
+    user = await user_service.get_user_by_id(user_id=token_data.user_id)
 
     return user

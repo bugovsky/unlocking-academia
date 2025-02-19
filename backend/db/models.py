@@ -33,8 +33,8 @@ class Deletable(Creatable):
 class User(Base, HasID, Creatable):
     __tablename__ = "users"
 
-    firstname: so.Mapped[str | None] = so.mapped_column(sa.String(50), nullable=True)
-    lastname: so.Mapped[str | None] = so.mapped_column(sa.String(50), nullable=True)
+    firstname: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
+    lastname: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
     email: so.Mapped[str] = so.mapped_column(sa.String(100), unique=True)
     password: so.Mapped[str] =  so.mapped_column(sa.String)
     role: so.Mapped[Role] = so.mapped_column(su.ChoiceType(Role, impl=sa.String()), nullable=False)

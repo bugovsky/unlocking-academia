@@ -18,7 +18,14 @@ class AuthService:
         if user is None:
             raise CREDENTIALS_EXCEPTION
 
-        possible_user = TryingToAuthUser(id=user.id, password=user.password, email=user.email, role=user.role)
+        possible_user = TryingToAuthUser(
+            firstname=user.firstname,
+            lastname=user.lastname,
+            id=user.id,
+            password=user.password,
+            email=user.email,
+            role=user.role,
+        )
         if not verify_password(password, possible_user.password.get_secret_value()):
             raise CREDENTIALS_EXCEPTION
         return possible_user

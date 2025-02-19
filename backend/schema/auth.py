@@ -9,4 +9,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    id: UUID
+    user_id: UUID

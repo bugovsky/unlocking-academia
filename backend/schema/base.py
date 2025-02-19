@@ -1,11 +1,11 @@
 import enum
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class HasID(BaseModel):
-    id: UUID
+    id: UUID = Field(default_factory=uuid4)
 
 
 @enum.unique
