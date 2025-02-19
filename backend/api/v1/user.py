@@ -15,11 +15,11 @@ async def create_user(user: CreateUser, user_service: Annotated[UserService, Dep
     return await user_service.create_user(user_data=user)
 
 
-@router.get('/{user_id}', status_code=status.HTTP_200_OK, response_model=User)
+@router.get("/{user_id}", status_code=status.HTTP_200_OK, response_model=User)
 async def get_user(user_id: UUID, user_service: Annotated[UserService, Depends()]):
     return await user_service.get_user_by_id(user_id)
 
 
-@router.patch('/{user_id}', status_code=status.HTTP_200_OK, response_model=User)
+@router.patch("/{user_id}", status_code=status.HTTP_200_OK, response_model=User)
 async def update_user(user_id: UUID, user_info: UpdateUser):
     return UserFactory.build(**user_info.model_dump())

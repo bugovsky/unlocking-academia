@@ -13,6 +13,6 @@ async def create_comment(comment: CreateComment):
     return CommentFactory.build(**comment.model_dump())
 
 
-@router.get('/{comment_id}', status_code=status.HTTP_200_OK, response_model=Comment)
+@router.get("/{comment_id}", status_code=status.HTTP_200_OK, response_model=Comment)
 async def get_comment(comment_id: UUID):
     return CommentFactory.build()

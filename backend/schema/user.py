@@ -22,7 +22,7 @@ class CreateUser(BaseModel):
         None, examples=[[Domain.DB], [Domain.CS, Domain.MATHEMATICS], None]
     )
 
-    @field_validator('email', mode='after')
+    @field_validator("email", mode="after")
     @classmethod
     def validate_hse_domain(cls, v: str) -> str:
         allowed_domain = "hse.ru"

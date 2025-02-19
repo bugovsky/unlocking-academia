@@ -18,14 +18,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 # TODO: convert to class somehow?
 
 def create_access_token(data: dict, expires_delta: datetime.timedelta | None = None):
-        to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
-        else:
-            expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=15)
-        to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(payload=to_encode, key=jwt_settings.secret_key, algorithm=jwt_settings.algorithm)
-        return encoded_jwt
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.datetime.now(datetime.timezone.utc) + expires_delta
+    else:
+        expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(payload=to_encode, key=jwt_settings.secret_key, algorithm=jwt_settings.algorithm)
+    return encoded_jwt
 
 
 def verify_access_token(token: str):

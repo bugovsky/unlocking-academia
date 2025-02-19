@@ -16,11 +16,11 @@ async def create_post(post: CreatePost, user: Annotated[User, Depends(get_curren
     return Post(**post.model_dump())
 
 
-@router.get('/{post_id}', status_code=status.HTTP_200_OK, response_model=Post)
+@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=Post)
 async def get_post(post_id: UUID):
     return PostFactory.build(views=0)
 
 
-@router.patch('/{post_id}', status_code=status.HTTP_200_OK, response_model=Post)
+@router.patch("/{post_id}", status_code=status.HTTP_200_OK, response_model=Post)
 async def update_post(post_id: UUID, post_updates: UpdatePost):
     return Post(**post_updates.model_dump())
