@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db.utils import create_session
 from backend.db import models as db
-from backend.schema.user import UserCreate, User, UserUpdate
+from backend.schema.user import UserCreate, UserUpdate
 from backend.utils.security import get_password_hash
 
 
@@ -21,7 +21,7 @@ class UserRepo:
 
     async def create_user(self, user_data: UserCreate) -> db.User:
         async with create_session() as db_session:
-            db_user = db.User(
+            user = db.User(
                 firstname=user_data.firstname,
                 lastname=user_data.lastname,
                 email=user_data.email,
@@ -29,9 +29,9 @@ class UserRepo:
                 role=user_data.role,
                 domain=user_data.domain,
             )
-            db_session.add(db_user)
+            db_session.add(user)
             await db_session.flush()
-            return db_user
+            return user
 
     async def update_user(self, user_id: UUID, user_data: UserUpdate) -> db.User | None:
         async with create_session() as db_session:

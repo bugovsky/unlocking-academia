@@ -78,7 +78,7 @@ class Post(Base, HasID, Updatable, Deletable):
     __tablename__ = "posts"
 
     content: so.Mapped[str]
-    media_url: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
+    media_urls: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
     domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())))
     views: so.Mapped[int] = so.mapped_column(default=0)
 
