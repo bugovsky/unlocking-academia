@@ -12,7 +12,7 @@ class Role(enum.StrEnum):
     ADMIN = "admin"
 
 
-class CreateUser(BaseModel):
+class UserCreate(BaseModel):
     firstname: str = Field("Иван", min_length=1, max_length=75)
     lastname: str = Field("Иванов", min_length=1, max_length=75)
     email: EmailStr = Field("user@edu.hse.ru")
@@ -31,9 +31,9 @@ class CreateUser(BaseModel):
 
         return v
 
-class UpdateUser(BaseModel):
-    firstname: str | None = Field(None, min_length=1, max_length=75)
-    lastname: str | None = Field(None, min_length=1, max_length=75)
+class UserUpdate(BaseModel):
+    firstname: str = Field(..., min_length=1, max_length=75)
+    lastname: str = Field(..., min_length=1, max_length=75)
     domain: list[Domain] | None = Field(None, examples=[[Domain.CS, Domain.MATHEMATICS], None])
 
 
@@ -45,5 +45,5 @@ class User(HasID):
     domain: list[Domain] | None = Field(None, examples=[[Domain.CS, Domain.MATHEMATICS], None])
 
 
-class TryingToAuthUser(User):
+class UserTryingToAuth(User):
     password: SecretStr

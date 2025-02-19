@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from fastapi.params import Depends
 
 from backend.repository.user import UserRepo
-from backend.schema.user import User, CreateUser
+from backend.schema.user import User, UserCreate, UserUpdate
 
 
 class UserService:
@@ -26,7 +26,7 @@ class UserService:
             domain=user.domain,
         )
 
-    async def create_user(self, user_data: CreateUser) -> User:
+    async def create_user(self, user_data: UserCreate) -> User:
         user_by_email = await self._user_repo.get_user_by_email(email=user_data.email)
         if user_by_email is not None:
             raise HTTPException(
@@ -40,4 +40,18 @@ class UserService:
             email=user.email,
             role=user.role,
             domain=user.domain,
+        )
+
+    async def update_user(self, user_id: UUID, user_data: UserUpdate) -> User:
+        updated_user = await self._user_repo.update_user(user_id, user_data)
+        if updated_user is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+        return User(
+            id=updated_user.id,
+            firstname=updated_user.firstname,
+            lastname=updated_user.lastname,
+            email=updated_user.email,
+            role=updated_user.role,
+            domain=updated_user.domain,
         )

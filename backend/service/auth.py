@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi.params import Depends
 
 from backend.repository.user import UserRepo
-from backend.schema.user import TryingToAuthUser
+from backend.schema.user import UserTryingToAuth
 from backend.utils.exception.auth.jwt import CREDENTIALS_EXCEPTION
 from backend.utils.security import verify_password, get_password_hash
 
@@ -18,7 +18,7 @@ class AuthService:
         if user is None:
             raise CREDENTIALS_EXCEPTION
 
-        possible_user = TryingToAuthUser(
+        possible_user = UserTryingToAuth(
             firstname=user.firstname,
             lastname=user.lastname,
             id=user.id,
