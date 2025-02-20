@@ -1,23 +1,40 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
-from backend.schema.rating import CreateRating, Rating, UpdateRating
-from tests.factory.schema import RatingFactory
+from backend.schema.rating import RatingCreate, RatingByUser, RatingUpdate, PostRating
+from backend.schema.user import User
+from backend.service.rating import RatingService
+from backend.utils.client.auth.jwt import get_current_user
 
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=Rating)
-async def rate_post(rating: CreateRating):
-    return RatingFactory.build(**rating.model_dump())
+@router.post("/{post_id}", status_code=status.HTTP_201_CREATED, response_model=RatingByUser)
+async def rate_post(
+    post_id: UUID,
+    rating: RatingCreate,
+    user: Annotated[User, Depends(get_current_user)],
+    rating_service: Annotated[RatingService, Depends()],
+):
+    return await rating_service.rate(post_id=post_id, user_id=user.id, rating_data=rating)
 
 
-@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=Rating)
-async def get_post_rating(post_id: UUID):
-    return RatingFactory.build(post_id=post_id)
+@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=PostRating)
+async def get_post_rating(
+    post_id: UUID,
+    user: Annotated[User, Depends(get_current_user)],
+    rating_service: Annotated[RatingService, Depends()],
+):
+    return await rating_service.get_post_rating(post_id)
 
 
-@router.patch("/{post_id}", status_code=status.HTTP_200_OK, response_model=Rating)
-async def update_post_rating(post_id: UUID, updated_rating: UpdateRating):
-    return RatingFactory.build(**updated_rating.model_dump(), post_id=post_id)
+@router.patch("/{post_id}", status_code=status.HTTP_200_OK, response_model=RatingByUser)
+async def update_post_rating(
+    post_id: UUID,
+    updated_rating: RatingUpdate,
+    user: Annotated[User, Depends(get_current_user)],
+    rating_service: Annotated[RatingService, Depends()],
+):
+    return await rating_service.update_rating(post_id=post_id, user_id=user.id, rating_data=updated_rating)
