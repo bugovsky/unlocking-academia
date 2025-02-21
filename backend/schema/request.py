@@ -11,7 +11,7 @@ class Type(enum.StrEnum):
     CONSULTATION = "consultation"
 
 
-class CreateRequest(BaseModel):
+class RequestCreate(BaseModel):
     question: str
     type: Type
     recipient_id: UUID
@@ -25,5 +25,5 @@ class Request(HasID):
     recipient_id: UUID
 
 
-class CloseRequest(BaseModel):
+class RequestClose(BaseModel):
     response: str

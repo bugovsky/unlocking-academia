@@ -5,12 +5,11 @@ from fastapi import APIRouter, status, Depends
 
 from backend.schema.user import UserCreate, User, UserUpdate
 from backend.service.user import UserService
-from tests.factory.schema import UserFactory
 
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=User)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=User)
 async def create_user(user: UserCreate, user_service: Annotated[UserService, Depends()]):
     return await user_service.create_user(user_data=user)
 

@@ -90,7 +90,7 @@ class Request(Base, HasID, Updatable):
     __tablename__ = "requests"
 
     question: so.Mapped[str] = so.mapped_column(nullable=False)
-    response: so.Mapped[str] = so.mapped_column(nullable=True)
+    response: so.Mapped[str] = so.mapped_column(default=None, nullable=True)
     type: so.Mapped[Type] = so.mapped_column(nullable=False)
     author_id: so.Mapped[UUID | None] = so.mapped_column(ForeignKey("users.id"), nullable=True)
     recipient_id: so.Mapped[UUID] = so.mapped_column(ForeignKey("users.id"))

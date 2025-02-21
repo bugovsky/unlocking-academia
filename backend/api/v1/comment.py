@@ -7,12 +7,11 @@ from backend.schema.comment import CommentCreate, Comment
 from backend.schema.user import User
 from backend.service.comment import CommentService
 from backend.utils.client.auth.jwt import get_current_user
-from tests.factory.schema import CommentFactory
 
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=Comment)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=Comment)
 async def create_comment(
     post_id: UUID,
     comment: CommentCreate,
