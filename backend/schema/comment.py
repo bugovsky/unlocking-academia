@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from backend.schema.base import HasID
 
 
-class CreateComment(BaseModel):
+class CommentCreate(BaseModel):
     content: str
 
 class Comment(HasID):
