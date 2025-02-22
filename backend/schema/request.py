@@ -3,19 +3,21 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from backend.schema.base import HasID
+
 
 class Type(enum.StrEnum):
     QUESTION = "question"
     CONSULTATION = "consultation"
 
 
-class CreateRequest(BaseModel):
+class RequestCreate(BaseModel):
     question: str
     type: Type
     recipient_id: UUID
 
 
-class Request(BaseModel):
+class Request(HasID):
     question: str
     type: Type
     response: str | None = None
@@ -23,5 +25,5 @@ class Request(BaseModel):
     recipient_id: UUID
 
 
-class CloseRequest(BaseModel):
+class RequestClose(BaseModel):
     response: str

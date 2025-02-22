@@ -1,5 +1,4 @@
 from datetime import datetime
-from tokenize import String
 from uuid import UUID, uuid4
 
 import sqlalchemy as sa
@@ -7,11 +6,11 @@ import sqlalchemy.orm as so
 import sqlalchemy_utils as su
 
 from sqlalchemy import func, ForeignKey
-from sqlalchemy.dialects.postgresql import ARRAY
 
 from backend.db.base import Base
+from backend.schema.base import Domain
 from backend.schema.request import Type
-from backend.schema.user import Role, Domain
+from backend.schema.user import Role
 
 
 @so.declarative_mixin
@@ -34,11 +33,11 @@ class Deletable(Creatable):
 class User(Base, HasID, Creatable):
     __tablename__ = "users"
 
-    firstname: so.Mapped[str] = so.mapped_column(sa.String(50))
-    lastname: so.Mapped[str] = so.mapped_column(sa.String(50))
+    firstname: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
+    lastname: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
     email: so.Mapped[str] = so.mapped_column(sa.String(100), unique=True)
     password: so.Mapped[str] =  so.mapped_column(sa.String)
-    role: so.Mapped[Role] = so.mapped_column(nullable=False)
+    role: so.Mapped[Role] = so.mapped_column(su.ChoiceType(Role, impl=sa.String()), nullable=False)
     domain: so.Mapped[list[Domain] | None] = so.mapped_column(
         sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())), nullable=True
     )
@@ -79,7 +78,7 @@ class Post(Base, HasID, Updatable, Deletable):
     __tablename__ = "posts"
 
     content: so.Mapped[str]
-    media_url: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
+    media_urls: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
     domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())))
     views: so.Mapped[int] = so.mapped_column(default=0)
 
@@ -91,7 +90,7 @@ class Request(Base, HasID, Updatable):
     __tablename__ = "requests"
 
     question: so.Mapped[str] = so.mapped_column(nullable=False)
-    response: so.Mapped[str] = so.mapped_column(nullable=True)
+    response: so.Mapped[str] = so.mapped_column(default=None, nullable=True)
     type: so.Mapped[Type] = so.mapped_column(nullable=False)
     author_id: so.Mapped[UUID | None] = so.mapped_column(ForeignKey("users.id"), nullable=True)
     recipient_id: so.Mapped[UUID] = so.mapped_column(ForeignKey("users.id"))
