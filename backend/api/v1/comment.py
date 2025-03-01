@@ -1,18 +1,30 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, status, Depends
 
-from backend.schema.comment import CreateComment, Comment
-from tests.factory.schema import CommentFactory
+from backend.schema.comment import CommentCreate, Comment
+from backend.schema.user import User
+from backend.service.comment import CommentService
+from backend.utils.client.auth.jwt import get_current_user
 
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=Comment)
-async def create_comment(comment: CreateComment):
-    return CommentFactory.build(**comment.model_dump())
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=Comment)
+async def create_comment(
+    post_id: UUID,
+    comment: CommentCreate,
+    user: Annotated[User, Depends(get_current_user)],
+    comment_service: Annotated[CommentService, Depends()],
+):
+    return await comment_service.create_comment(post_id, user_id=user.id, comment_data=comment)
 
 
-@router.get('/{comment_id}', status_code=status.HTTP_200_OK, response_model=Comment)
-async def get_comment(comment_id: UUID):
-    return CommentFactory.build()
+@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=list[Comment])
+async def get_post_comments(
+    post_id: UUID,
+    user: Annotated[User, Depends(get_current_user)],
+    comment_service: Annotated[CommentService, Depends()],
+):
+    return await comment_service.get_post_comments(post_id)

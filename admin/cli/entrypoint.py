@@ -16,13 +16,13 @@ admin_app = typer.Typer(short_help="Запуск backend-приложения")
 def launch_admin():
 
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = '123456790'
+    app.config["SECRET_KEY"] = "123456790"
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_settings.sync_url
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_settings.sync_url
+    app.config["SQLALCHEMY_ECHO"] = True
     db = SQLAlchemy(app)
 
-    admin = Admin(app, name='Unlocking Academia')
+    admin = Admin(app, name="Unlocking Academia")
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Post, db.session))
     admin.add_view(ModelView(Comment, db.session))
