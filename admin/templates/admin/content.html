@@ -1,0 +1,26 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+  <h1>Content Management</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Context</th>
+        <th>Text</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in content %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.context }}</td>
+          <td>{{ item.value|truncate(50) }}</td>
+          <td>
+            <a href="{{ url_for('.edit', key=item.key) }}" class="btn btn-primary btn-sm">Edit</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
