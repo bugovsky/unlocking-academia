@@ -7,8 +7,6 @@ from sqlalchemy.ext.asyncio.engine import AsyncEngine
 
 class DBSettings(BaseSettings):
     url: str
-    # TODO как подружить flask-админ с асинхронным клиентом?
-    sync_url: str
 
     model_config = SettingsConfigDict(env_prefix="DB_")
 
