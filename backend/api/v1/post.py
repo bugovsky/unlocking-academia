@@ -13,6 +13,11 @@ router = APIRouter()
 # TODO: add enpoint for all posts (pagination)
 
 
+@router.get("", status_code=status.HTTP_200_OK, response_model=list[Post])
+async def get_posts(post_service: Annotated[PostService, Depends()]):
+    return await post_service.get_posts()
+
+
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=Post)
 async def create_post(
     post: PostCreate, user: Annotated[User, Depends(get_current_user)], post_service: Annotated[PostService, Depends()]
@@ -26,7 +31,7 @@ async def create_post(
 
 @router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=Post)
 async def get_post(
-    post_id: UUID, user: Annotated[User, Depends(get_current_user)], post_service: Annotated[PostService, Depends()]
+    post_id: UUID, post_service: Annotated[PostService, Depends()]
 ):
     return await post_service.get_post_by_id(post_id)
 

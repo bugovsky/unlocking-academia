@@ -21,10 +21,9 @@ async def rate_post(
     return await rating_service.rate(post_id=post_id, user_id=user.id, rating_data=rating)
 
 
-@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=PostRating)
+@router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=PostRating | None)
 async def get_post_rating(
     post_id: UUID,
-    user: Annotated[User, Depends(get_current_user)],
     rating_service: Annotated[RatingService, Depends()],
 ):
     return await rating_service.get_post_rating(post_id)
