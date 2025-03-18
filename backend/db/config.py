@@ -21,4 +21,4 @@ class DBSettings(BaseSettings):
 
     @property
     def engine(self) -> AsyncEngine:
-        return create_async_engine(url=make_url(self.url), echo=True)
+        return create_async_engine(url=make_url(self.url), echo=False)

@@ -13,6 +13,11 @@ class PostService:
     def __init__(self, post_repo: Annotated[PostRepo, Depends()]):
         self._post_repo = post_repo
 
+    async def get_posts(self) -> list[Post]:
+        posts = await self._post_repo.get_posts()
+
+        return [self._build_post(post) for post in posts]
+
     async def get_post_by_id(self, post_id: UUID) -> Post:
         post = await self._post_repo.get_post_by_id(post_id)
         if post is None:

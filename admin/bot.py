@@ -4,7 +4,7 @@ from flask_admin import BaseView, expose
 from common.manager import content_manager, CONTENT_INFO
 
 
-class TgBotContent(BaseView):
+class TgBotContentView(BaseView):
     @expose('/')
     def index(self):
         content = content_manager.get_all()

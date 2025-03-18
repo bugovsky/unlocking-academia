@@ -10,6 +10,11 @@ from backend.schema.post import PostCreate, PostUpdate
 
 
 class PostRepo:
+    async def get_posts(self) -> list[db.Post]:
+        async with create_session() as db_session:
+            query = select(db.Post)
+            return (await db_session.execute(query)).scalars().all()
+
     async def get_post_by_id(self, post_id: UUID) -> db.Post:
         async with create_session() as db_session:
             return await self._get_post_by_id(db_session, post_id)

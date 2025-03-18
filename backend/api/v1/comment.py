@@ -11,7 +11,7 @@ from backend.utils.client.auth.jwt import get_current_user
 router = APIRouter()
 
 
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=Comment)
+@router.post("/{post_id}", status_code=status.HTTP_201_CREATED, response_model=Comment)
 async def create_comment(
     post_id: UUID,
     comment: CommentCreate,
@@ -24,7 +24,6 @@ async def create_comment(
 @router.get("/{post_id}", status_code=status.HTTP_200_OK, response_model=list[Comment])
 async def get_post_comments(
     post_id: UUID,
-    user: Annotated[User, Depends(get_current_user)],
     comment_service: Annotated[CommentService, Depends()],
 ):
     return await comment_service.get_post_comments(post_id)

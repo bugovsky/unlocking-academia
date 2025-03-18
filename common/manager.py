@@ -5,7 +5,7 @@ from redis.asyncio import Redis as AsyncRedis
 
 from common.redis.client import redis, async_redis
 
-ContentInfo = namedtuple('ContentInfo', ['name', 'context', 'default'])
+ContentInfo = namedtuple("ContentInfo", ["name", "context", "default"])
 
 CONTENT_INFO = {
     "start": ContentInfo(
