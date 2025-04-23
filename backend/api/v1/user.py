@@ -13,6 +13,10 @@ router = APIRouter()
 async def create_user(user: UserCreate, user_service: Annotated[UserService, Depends()]):
     return await user_service.create_user(user_data=user)
 
+@router.get("/experts", status_code=status.HTTP_200_OK, response_model=list[User])
+async def get_not_students(user_service: Annotated[UserService, Depends()]):
+    return await user_service.get_not_students()
+
 
 @router.get("/{user_id}", status_code=status.HTTP_200_OK, response_model=User)
 async def get_user(user_id: UUID, user_service: Annotated[UserService, Depends()]):

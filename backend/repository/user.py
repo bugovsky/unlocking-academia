@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.db.utils import create_session
 from backend.db import models as db
-from backend.schema.user import UserCreate, UserUpdate
+from backend.schema.user import UserCreate, UserUpdate, Role
 from backend.utils.security import get_password_hash
 
 
@@ -18,6 +18,11 @@ class UserRepo:
     async def get_user_by_id(self, user_id: UUID) -> db.User:
         async with create_session() as db_session:
             return await self._get_user_by_id(db_session, user_id)
+
+    async def get_not_students(self) -> list[db.User]:
+        async with create_session() as db_session:
+            query = select(db.User).where(db.User.role != Role.STUDENT)
+            return (await db_session.execute(query)).scalars().all()
 
     async def create_user(self, user_data: UserCreate) -> db.User:
         async with create_session() as db_session:

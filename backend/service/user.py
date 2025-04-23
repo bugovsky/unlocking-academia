@@ -20,6 +20,11 @@ class UserService:
 
         return self._build_user(user)
 
+    async def get_not_students(self) -> list[User]:
+        users = await self._user_repo.get_not_students()
+
+        return [self._build_user(user) for user in users]
+
     async def create_user(self, user_data: UserCreate) -> User:
         user_by_email = await self._user_repo.get_user_by_email(email=user_data.email)
         if user_by_email is not None:
