@@ -1,5 +1,4 @@
 from aiogram import F, Router, types
-from aiogram.enums import ParseMode
 from aiogram.filters.command import Command
 
 from common.manager import content_manager
@@ -9,9 +8,7 @@ from tgbot.keyboard import (
     get_mobility_keyboard,
     get_labs_keyboard,
     get_projects_keyboard,
-    get_question_keyboard,
     get_faq_keyboard,
-    get_consult_keyboard,
     get_active_scholarships_keyboard,
     get_archive_scholarships_keyboard,
     get_projects_participation_keyboard,
@@ -56,25 +53,11 @@ async def projects(message: types.Message):
         reply_markup=get_projects_keyboard()
     )
 
-@router.message(F.text.strip() == "📩 Отправить нам вопрос")
-async def ask(message: types.Message):
-    await message.answer(
-        await content_manager.aget("ask"),
-        reply_markup=get_question_keyboard()
-    )
-
 @router.message(F.text.strip() == "❓ Часто задаваемые вопросы")
 async def faq(message: types.Message):
     await message.answer(
         await content_manager.aget("faq"),
         reply_markup=get_faq_keyboard()
-    )
-
-@router.message(F.text.strip() == "👥 Индивидуальная консультация")
-async def consult(message: types.Message):
-    await message.answer(
-        await content_manager.aget("consult"),
-        reply_markup=get_consult_keyboard()
     )
 
 @router.message(F.text.strip() == "Активные программы стипендий")
