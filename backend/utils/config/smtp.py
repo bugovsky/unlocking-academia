@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -10,4 +11,5 @@ class SMTPSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_prefix="EMAIL_")
 
+load_dotenv()
 smtp_settings = SMTPSettings()
