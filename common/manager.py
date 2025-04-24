@@ -2,7 +2,6 @@ from collections import namedtuple
 import json
 from typing import List, Dict, Optional
 
-from dotenv import unset_key
 from redis import Redis
 from redis.asyncio import Redis as AsyncRedis
 
@@ -38,7 +37,7 @@ CONTENT_INFO = {
         default="Здесь ты можешь узнать о проектах и возможностях\n(Раздел пополняется)"
     ),
     "ask": ContentInfo(
-        name="Отправить нам вопрос",
+        name="Отправить нам вопрос / Записаться на консультацию",
         context="Ответ на кнопку '📩 Отправить нам вопрос'",
         default="Если ты не нашел интересующей тебя информации..."
     ),
@@ -81,32 +80,10 @@ CONTENT_INFO = {
         name="Неизвестная команда",
         context="Сообщение при вводе неизвестной команды",
         default="Я не знаю такой команды :("
-    )
+    ),
 }
 
 KEYBOARD_INFO = {
-    "start": KeyboardInfo(
-        name="Главное меню",
-        context="Кнопки главного меню (/start)",
-        default=[
-            {"text": "💸 Стипендии", "url": None},
-            {"text": "🚗 Программы международной мобильности", "url": None},
-            {"text": "🔬 Лаборатории", "url": None},
-            {"text": "💼 Проекты и НУГи", "url": None},
-            {"text": "❓ Часто задаваемые вопросы", "url": None},
-            {"text": "👥 Индивидуальная консультация", "url": None},
-            {"text": "📩 Отправить нам вопрос", "url": None}
-        ]
-    ),
-    "scholarship": KeyboardInfo(
-        name="Стипендии",
-        context="Кнопки меню стипендий",
-        default=[
-            {"text": "Активные программы стипендий", "url": None},
-            {"text": "Архив стипендиальных программ", "url": None},
-            {"text": "Назад", "url": None}
-        ]
-    ),
     "mobility": KeyboardInfo(
         name="Программы мобильности",
         context="Кнопки меню программ мобильности",
@@ -123,24 +100,6 @@ KEYBOARD_INFO = {
         default=[
             {"text": "Список лабораторий", "url": "https://www.hse.ru/science/nul/lab#pagetop"},
             {"text": "Вакансии", "url": "https://career.hse.ru/insidehse"},
-            {"text": "Назад", "url": None}
-        ]
-    ),
-    "projects": KeyboardInfo(
-        name="Проекты и НУГи",
-        context="Кнопки меню проектов и НУГов",
-        default=[
-            {"text": "Участие в проектах", "url": None},
-            {"text": "Про научно-учебные группы", "url": None},
-            {"text": "Назад", "url": None}
-        ]
-    ),
-    "faq": KeyboardInfo(
-        name="Часто задаваемые вопросы",
-        context="Кнопки меню FAQ",
-        default=[
-            {"text": "Что такое НУГ?", "url": None},
-            {"text": "Как получить финансирование?", "url": None},
             {"text": "Назад", "url": None}
         ]
     ),
@@ -203,7 +162,6 @@ class ContentManager:
 
     def _fill_buttons(self):
         for key, info in KEYBOARD_INFO.items():
-            print(key, info)
             redis_key = f"{self.BUTTONS_KEY_PREFIX}{key}"
             if not self._client.exists(redis_key):
                 self._client.set(redis_key, json.dumps(info.default))
@@ -217,8 +175,9 @@ class ContentManager:
     def get_all(self):
         return self._client.hgetall(self.CONTENT_KEY)
 
-    async def aget(self, key: str) -> str:
-        return await self._async_client.hget(self.CONTENT_KEY, key) or "Текст не найден"
+    async def aget(self, key: str, default: str = "Текст не найден") -> str:
+        result = await self._async_client.hget(self.CONTENT_KEY, key) or default
+        return result
 
     async def aset(self, key: str, value: str) -> None:
         await self._async_client.hset(self.CONTENT_KEY, key, value)
@@ -235,7 +194,8 @@ class ContentManager:
     async def aget_buttons(self, keyboard_key: str) -> List[Dict[str, str]]:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
         buttons_json = await self._async_client.get(redis_key)
-        return json.loads(buttons_json) if buttons_json else []
+        result = json.loads(buttons_json) if buttons_json else []
+        return result
 
     async def aset_buttons(self, keyboard_key: str, buttons: List[Dict[str, str]]) -> None:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
