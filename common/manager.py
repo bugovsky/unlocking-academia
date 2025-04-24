@@ -1,6 +1,5 @@
 from collections import namedtuple
 import json
-from typing import List, Dict, Optional
 
 from redis import Redis
 from redis.asyncio import Redis as AsyncRedis
@@ -35,11 +34,6 @@ CONTENT_INFO = {
         name="Проекты и НУГи",
         context="Ответ на кнопку '💼 Проекты и НУГи'",
         default="Здесь ты можешь узнать о проектах и возможностях\n(Раздел пополняется)"
-    ),
-    "ask": ContentInfo(
-        name="Отправить нам вопрос / Записаться на консультацию",
-        context="Ответ на кнопку '📩 Отправить нам вопрос'",
-        default="Если ты не нашел интересующей тебя информации..."
     ),
     "faq": ContentInfo(
         name="Часто задаваемые вопросы",
@@ -76,22 +70,46 @@ CONTENT_INFO = {
         context="Ответ на вопрос 'Как получить финансирование?'",
         default="Вышка может оказать студенческим инициативам финансовую поддержку..."
     ),
+    "ask": ContentInfo(
+        name="Отправить нам вопрос / Записаться на консультацию",
+        context="Ответ на кнопку '📩 Отправить нам вопрос / Записаться на консультацию'",
+        default="Если ты не нашел интересующей тебя информации..."
+    ),
     "unknown_command": ContentInfo(
         name="Неизвестная команда",
         context="Сообщение при вводе неизвестной команды",
         default="Я не знаю такой команды :("
-    ),
+    )
 }
 
 KEYBOARD_INFO = {
+    "start": KeyboardInfo(
+        name="Главное меню",
+        context="Кнопки главного меню (/start)",
+        default=[
+            {"text": "💸 Стипендии", "url": None},
+            {"text": "🚗 Программы международной мобильности", "url": None},
+            {"text": "🔬 Лаборатории", "url": None},
+            {"text": "💼 Проекты и НУГи", "url": None},
+            {"text": "❓ Часто задаваемые вопросы", "url": None},
+            {"text": "📩 Отправить нам вопрос / Записаться на консультацию", "url": "http://10.0.191.103:5173/request"}
+        ]
+    ),
+    "scholarships": KeyboardInfo(
+        name="Стипендии",
+        context="Кнопки меню стипендий",
+        default=[
+            {"text": "Активные программы стипендий", "url": None},
+            {"text": "Архив стипендиальных программ", "url": None}
+        ]
+    ),
     "mobility": KeyboardInfo(
         name="Программы мобильности",
         context="Кнопки меню программ мобильности",
         default=[
             {"text": "🌍 Направления мобильности", "url": "https://studyabroad.hse.ru/catalogue"},
             {"text": "🖋️ Подача заявок", "url": "https://studyabroad.hse.ru/howtoapply"},
-            {"text": "💰 Гранты", "url": "https://studyabroad.hse.ru/grants/"},
-            {"text": "Назад", "url": None}
+            {"text": "💰 Гранты", "url": "https://studyabroad.hse.ru/grants/"}
         ]
     ),
     "labs": KeyboardInfo(
@@ -99,8 +117,23 @@ KEYBOARD_INFO = {
         context="Кнопки меню лабораторий",
         default=[
             {"text": "Список лабораторий", "url": "https://www.hse.ru/science/nul/lab#pagetop"},
-            {"text": "Вакансии", "url": "https://career.hse.ru/insidehse"},
-            {"text": "Назад", "url": None}
+            {"text": "Вакансии", "url": "https://career.hse.ru/insidehse"}
+        ]
+    ),
+    "projects": KeyboardInfo(
+        name="Проекты и НУГи",
+        context="Кнопки меню проектов и НУГов",
+        default=[
+            {"text": "Участие в проектах", "url": None},
+            {"text": "Про научно-учебные группы", "url": None}
+        ]
+    ),
+    "faq": KeyboardInfo(
+        name="Часто задаваемые вопросы",
+        context="Кнопки меню FAQ",
+        default=[
+            {"text": "Что такое НУГ?", "url": None},
+            {"text": "Как получить финансирование?", "url": None}
         ]
     ),
     "active_scholarships": KeyboardInfo(
@@ -108,8 +141,7 @@ KEYBOARD_INFO = {
         context="Кнопки меню активных стипендий",
         default=[
             {"text": "Стипендия Россельхозбанка", "url": "https://svoevagro.ru/events/scholarship-program"},
-            {"text": "Грант Президента Российской Федерации", "url": "https://грантыпрезидента.рф"},
-            {"text": "Назад", "url": None}
+            {"text": "Грант Президента Российской Федерации", "url": "https://грантыпрезидента.рф"}
         ]
     ),
     "archive_scholarships": KeyboardInfo(
@@ -121,16 +153,14 @@ KEYBOARD_INFO = {
             {"text": "Стипендия Правительства Москвы", "url": "https://www.hse.ru/scholarships/mosgovt"},
             {"text": "Стипендия фонда Потанина", "url": "https://fondpotanin.ru/competitions/fellowships/"},
             {"text": "Стипендия Президента РФ для обучения за рубежом", "url": "https://стипендиатроссии.рф/forstudyingabroad"},
-            {"text": "Стипендия Тинькофф", "url": "https://fintech.tinkoff.ru/scholarship/"},
-            {"text": "Назад", "url": None}
+            {"text": "Стипендия Тинькофф", "url": "https://fintech.tinkoff.ru/scholarship/"}
         ]
     ),
     "projects_participation": KeyboardInfo(
         name="Участие в проектах",
         context="Кнопки меню участия в проектах",
         default=[
-            {"text": "Ярмарка проектов", "url": "https://pf.hse.ru"},
-            {"text": "Назад", "url": None}
+            {"text": "Ярмарка проектов", "url": "https://pf.hse.ru"}
         ]
     ),
     "nug": KeyboardInfo(
@@ -138,8 +168,7 @@ KEYBOARD_INFO = {
         context="Кнопки меню НУГов",
         default=[
             {"text": "Финансирование", "url": "https://www.hse.ru/science/scifund/nug/financing"},
-            {"text": "Конкурс", "url": "https://www.hse.ru/science/scifund/nug/"},
-            {"text": "Назад", "url": None}
+            {"text": "Конкурс", "url": "https://www.hse.ru/science/scifund/nug/"}
         ]
     )
 }
@@ -182,24 +211,39 @@ class ContentManager:
     async def aset(self, key: str, value: str) -> None:
         await self._async_client.hset(self.CONTENT_KEY, key, value)
 
-    def get_buttons(self, keyboard_key: str) -> List[Dict[str, str]]:
+    def get_buttons(self, keyboard_key: str) -> list[dict[str, str]]:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
         buttons_json = self._client.get(redis_key)
-        return json.loads(buttons_json) if buttons_json else []
+        buttons = json.loads(buttons_json) if buttons_json else []
+        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+            return [btn for btn in buttons if btn.get("url")]
+        return buttons
 
-    def set_buttons(self, keyboard_key: str, buttons: List[Dict[str, str]]) -> None:
+    def set_buttons(self, keyboard_key: str, buttons: list[dict[str, str]]) -> None:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
-        self._client.set(redis_key, json.dumps(buttons))
+        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+            valid_buttons = [btn for btn in buttons if btn.get("url")]
+        else:
+            valid_buttons = buttons
+        self._client.set(redis_key, json.dumps(valid_buttons))
 
-    async def aget_buttons(self, keyboard_key: str) -> List[Dict[str, str]]:
+    async def aget_buttons(self, keyboard_key: str) -> list[dict[str, str]]:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
         buttons_json = await self._async_client.get(redis_key)
-        result = json.loads(buttons_json) if buttons_json else []
+        buttons = json.loads(buttons_json) if buttons_json else []
+        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+            result = [btn for btn in buttons if btn.get("url")]
+        else:
+            result = buttons
         return result
 
-    async def aset_buttons(self, keyboard_key: str, buttons: List[Dict[str, str]]) -> None:
+    async def aset_buttons(self, keyboard_key: str, buttons: list[dict[str, str]]) -> None:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
-        await self._async_client.set(redis_key, json.dumps(buttons))
+        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+            valid_buttons = [btn for btn in buttons if btn.get("url")]
+        else:
+            valid_buttons = buttons
+        await self._async_client.set(redis_key, json.dumps(valid_buttons))
 
     async def push_keyboard(self, user_id: int, keyboard_key: str) -> None:
         redis_key = f"{self.KEYBOARD_STACK_PREFIX}{user_id}:keyboard_stack"
@@ -208,7 +252,7 @@ class ContentManager:
         stack.append(keyboard_key)
         await self._async_client.set(redis_key, json.dumps(stack))
 
-    async def pop_keyboard(self, user_id: int) -> Optional[str]:
+    async def pop_keyboard(self, user_id: int) -> str | None:
         redis_key = f"{self.KEYBOARD_STACK_PREFIX}{user_id}:keyboard_stack"
         stack = await self._async_client.get(redis_key)
         if not stack:

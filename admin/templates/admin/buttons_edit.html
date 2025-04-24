@@ -17,7 +17,7 @@
           {% for button in buttons %}
             <div class="button-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
               <input type="text" class="form-control" name="button_text[]" value="{{ button.text }}" placeholder="Текст кнопки" required style="flex: 1; height: 38px;">
-              <input type="text" class="form-control" name="button_url[]" value="{{ button.url if button.url else '' }}" placeholder="URL (необязательно)" style="flex: 1; height: 38px;">
+              <input type="text" class="form-control" name="button_url[]" value="{{ button.url }}" placeholder="URL" required style="flex: 1; height: 38px;">
               <button type="button" class="btn btn-danger btn-sm remove-button" style="min-width: 80px; height: 38px; line-height: 1.5;">Удалить</button>
             </div>
           {% endfor %}
@@ -42,7 +42,7 @@
       newRow.style.marginBottom = '15px';
       newRow.innerHTML = `
         <input type="text" class="form-control" name="button_text[]" placeholder="Текст кнопки" required style="flex: 1; height: 38px;">
-        <input type="text" class="form-control" name="button_url[]" placeholder="URL (необязательно)" style="flex: 1; height: 38px;">
+        <input type="text" class="form-control" name="button_url[]" placeholder="URL" required style="flex: 1; height: 38px;">
         <button type="button" class="btn btn-danger btn-sm remove-button" style="min-width: 80px; height: 38px; line-height: 1.5;">Удалить</button>
       `;
       container.appendChild(newRow);

@@ -17,6 +17,7 @@ from tgbot.keyboard import (
 router = Router()
 
 async def get_keyboard_by_key(key: str):
+    """Возвращает функцию клавиатуры по её ключу."""
     keyboard_map = {
         "start": get_start_keyboard,
         "scholarships": get_scholarships_keyboard,

@@ -7,6 +7,14 @@ from common.manager import content_manager, KEYBOARD_INFO
 class TgBotButtonsView(BaseView):
     @expose('/')
     def index(self):
+        editable_keyboards = {
+            "mobility",
+            "labs",
+            "active_scholarships",
+            "archive_scholarships",
+            "projects_participation",
+            "nug"
+        }
         keyboards = [
             {
                 "key": key,
@@ -14,7 +22,7 @@ class TgBotButtonsView(BaseView):
                 "context": info.context,
                 "buttons": content_manager.get_buttons(key)
             }
-            for key, info in KEYBOARD_INFO.items()
+            for key, info in KEYBOARD_INFO.items() if key in editable_keyboards
         ]
         return self.render('admin/buttons.html', keyboards=keyboards)
 
