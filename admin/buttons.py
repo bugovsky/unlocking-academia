@@ -37,12 +37,10 @@ class TgBotButtonsView(BaseView):
                 button_texts = request.form.getlist('button_text[]')
                 button_urls = request.form.getlist('button_url[]')
 
-                # Проверка на пустой список кнопок
                 if not button_texts:
                     flash("Необходимо добавить хотя бы одну кнопку.", 'error')
                     return redirect(url_for('.edit', key=key))
 
-                # Формируем список кнопок
                 buttons = []
                 for text, url in zip(button_texts, button_urls):
                     if not text.strip():
