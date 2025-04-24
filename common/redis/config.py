@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,4 +10,5 @@ class RedisSettings(BaseSettings):
 
     model_config = SettingsConfigDict(env_prefix="REDIS_")
 
+load_dotenv()
 redis_settings = RedisSettings()

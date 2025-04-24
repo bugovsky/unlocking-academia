@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine.url import make_url
@@ -22,3 +23,5 @@ class DBSettings(BaseSettings):
     @property
     def engine(self) -> AsyncEngine:
         return create_async_engine(url=make_url(self.url), echo=False)
+
+load_dotenv()

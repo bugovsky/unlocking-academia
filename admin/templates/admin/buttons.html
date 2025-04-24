@@ -1,0 +1,32 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+  <h1>Keyboard Buttons Management</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Context</th>
+        <th>Buttons</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for keyboard in keyboards %}
+        <tr>
+          <td>{{ keyboard.name }}</td>
+          <td>{{ keyboard.context }}</td>
+          <td>
+            <ul>
+              {% for button in keyboard.buttons %}
+                <li>{{ button.text }} {% if button.url %}({{ button.url }}){% endif %}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td>
+            <a href="{{ url_for('.edit', key=keyboard.key) }}" class="btn btn-primary btn-sm">Edit</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

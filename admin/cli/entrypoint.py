@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_admin import Admin
 
-from admin.bot import TgBotContentView
+from admin.buttons import TgBotButtonsView
+from admin.content import TgBotContentView
 from admin.view.comment import CommentModelView
 from admin.view.home import DashboardView
 from admin.view.post import PostModelView
@@ -24,4 +25,5 @@ def launch_admin():
     admin.add_view(PostModelView(Post, db.session, name="Посты"))
     admin.add_view(CommentModelView(Comment, db.session, name="Комментарии"))
     admin.add_view(TgBotContentView(name="Содержимое ТГ-бота", endpoint="content"))
+    admin.add_view(TgBotButtonsView(name="Кнопки ТГ-бота", endpoint="buttons"))
     app.run()
