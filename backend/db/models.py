@@ -37,9 +37,9 @@ class User(Base, HasID, Creatable):
     lastname: so.Mapped[str] = so.mapped_column(sa.String(50), nullable=False)
     email: so.Mapped[str] = so.mapped_column(sa.String(100), unique=True)
     password: so.Mapped[str] =  so.mapped_column(sa.String)
-    role: so.Mapped[Role] = so.mapped_column(su.ChoiceType(Role, impl=sa.String()), nullable=False)
+    role: so.Mapped[Role] = so.mapped_column(su.ChoiceType(Role, impl=sa.Text()), nullable=False)
     domain: so.Mapped[list[Domain] | None] = so.mapped_column(
-        sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())), nullable=True
+        sa.ARRAY(su.ChoiceType(Domain, impl=sa.Text())), nullable=True
     )
 
     comments: so.Mapped[list["Comment"]] = so.relationship("Comment", back_populates="author", uselist=True)
@@ -79,7 +79,7 @@ class Post(Base, HasID, Updatable, Deletable):
 
     content: so.Mapped[str]
     media_urls: so.Mapped[list[str] | None] = so.mapped_column(sa.ARRAY(sa.String), nullable=True)
-    domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.String())))
+    domain: so.Mapped[list[Domain]] = so.mapped_column(sa.ARRAY(su.ChoiceType(Domain, impl=sa.Text())))
     views: so.Mapped[int] = so.mapped_column(default=0)
 
     comments: so.Mapped[list[Comment]] = so.relationship("Comment", back_populates="post", uselist=True)
@@ -91,7 +91,7 @@ class Request(Base, HasID, Updatable):
 
     question: so.Mapped[str] = so.mapped_column(nullable=False)
     response: so.Mapped[str] = so.mapped_column(default=None, nullable=True)
-    type: so.Mapped[Type] = so.mapped_column(nullable=False)
+    type: so.Mapped[Type] = so.mapped_column(su.ChoiceType(Type, impl=sa.Text()), nullable=False)
     author_id: so.Mapped[UUID | None] = so.mapped_column(ForeignKey("users.id"), nullable=True)
     recipient_id: so.Mapped[UUID] = so.mapped_column(ForeignKey("users.id"))
 

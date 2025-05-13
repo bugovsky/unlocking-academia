@@ -28,7 +28,6 @@ async def get_request(
 ):
     return await request_service.get_request_by_id(user_id=user.id, request_id=request_id)
 
-# TODO: pagination?
 @router.get("", status_code=status.HTTP_200_OK, response_model=list[Request])
 async def get_user_requests(
     user: Annotated[User, Depends(get_current_user)],

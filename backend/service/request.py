@@ -42,10 +42,11 @@ class RequestService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Author not found")
 
         subject_template = "Unlocking Academia. {topic}"
+        subject = ""
         if request_data.type is Type.QUESTION:
-            subject_template.format(topic="Вопрос от студента")
+            subject = subject_template.format(topic="Вопрос от студента")
         if request_data.type is Type.CONSULTATION:
-            subject_template.format(topic="Запись на консультацию")
+            subject = subject_template.format(topic="Запись на консультацию")
         body = (
             f"Вам поступил запрос от {author.firstname} {author.lastname}\n\n"
             f"{request_data.question}\n\n"
@@ -54,7 +55,7 @@ class RequestService:
         )
 
         try:
-            await send_email(to_email=recipient.email, subject=subject_template, body=body)
+            await send_email(to_email=recipient.email, subject=subject, body=body)
         except Exception as e:
             print(f"Failed to send email to {recipient.email}: {str(e)}")
 
