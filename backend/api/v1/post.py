@@ -2,7 +2,6 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, status, Depends, HTTPException
-import logging
 
 from backend.schema.post import PostCreate, Post, PostUpdate
 from backend.schema.user import User, Role
