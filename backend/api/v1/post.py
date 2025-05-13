@@ -11,11 +11,9 @@ from backend.utils.client.auth.jwt import get_current_user
 
 router = APIRouter()
 
-logger = logging.getLogger(__name__)
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=list[Post])
 async def get_posts(post_service: Annotated[PostService, Depends()]):
-    logger.debug("get_posts called")
     return await post_service.get_posts()
 
 
