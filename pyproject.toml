@@ -29,14 +29,15 @@ dependencies = [
     "aiogram (>=3.17.0,<4.0.0)",
     "redis (>=5.2.1,<6.0.0)",
     "aiosmtplib (>=4.0.0,<5.0.0)",
-    "pytest (>=8.3.5,<9.0.0)",
-    "pytest-mock (>=3.14.0,<4.0.0)",
     "httpx (>=0.28.1,<0.29.0)",
+    "alembic (>=1.15.2,<2.0.0)",
+    "pytest-env (>=1.1.5,<2.0.0)",
 ]
 
 [project.scripts]
 admin = 'admin.cli:app'
 academia = 'backend.cli:app'
+tgbot = 'tgbot.cli:app'
 
 [tool.poetry]
 packages = [
@@ -45,6 +46,38 @@ packages = [
     { include = "./tgbot" },
 ]
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-asyncio = "^0.26.0"
+pytest-cov = "^6.1.1"
+pytest-mock = "^3.14.0"
+testcontainers = "^4.10.0"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "**/__init__.py",
+    "**/.venv/*",
+    "backend/cli/*",
+    "admin/cli/*",
+    "tgbot/cli/*",
+]
+
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "--strict-markers --showlocals --verbosity 2"
+log_level = "DEBUG"
+filterwarnings = [
+    "error",
+    "ignore::DeprecationWarning",
+]
+env = [
+    "DB_URL=postgresql+psycopg_async://test:test@localhost:50365/test",
+]

@@ -15,8 +15,6 @@ from backend.utils.exception.auth.jwt import CREDENTIALS_EXCEPTION
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
-# TODO: convert to class somehow?
-
 def create_access_token(data: dict, expires_delta: datetime.timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:

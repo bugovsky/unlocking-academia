@@ -10,8 +10,6 @@ from backend.utils.client.auth.jwt import get_current_user
 
 router = APIRouter()
 
-# TODO: add enpoint for all posts (pagination)
-
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=list[Post])
 async def get_posts(post_service: Annotated[PostService, Depends()]):
