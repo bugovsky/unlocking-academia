@@ -16,7 +16,6 @@ class RatingService:
     async def get_post_rating(self, post_id: UUID) -> PostRating | None:
         post_rating = await self._rating_repo.get_post_rating(post_id)
         if post_rating is None:
-            # raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post to rate not found")
             return None
 
         return PostRating(post_id=post_id, grade=round(post_rating, 2))

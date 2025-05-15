@@ -17,7 +17,6 @@ from tgbot.keyboard import (
 router = Router()
 
 async def get_keyboard_by_key(key: str):
-    """Возвращает функцию клавиатуры по её ключу."""
     keyboard_map = {
         "start": get_start_keyboard,
         "scholarships": get_scholarships_keyboard,
@@ -47,18 +46,9 @@ async def back_to_start(callback: types.CallbackQuery):
 @router.callback_query(F.data == "back")
 async def back_to_previous(callback: types.CallbackQuery):
     user_id = callback.from_user.id
-    prev_keyboard_key = await content_manager.pop_keyboard(user_id)
-    if not prev_keyboard_key:
-        await content_manager.push_keyboard(user_id, "start")
-        await callback.message.edit_text(
-            await content_manager.aget("start"),
-            reply_markup=await get_start_keyboard(),
-            parse_mode="markdown"
-        )
-    else:
-        keyboard_func = await get_keyboard_by_key(prev_keyboard_key)
-        if not keyboard_func:
-            await content_manager.clear_keyboard_stack(user_id)
+    try:
+        prev_keyboard_key = await content_manager.pop_keyboard(user_id)
+        if not prev_keyboard_key:
             await content_manager.push_keyboard(user_id, "start")
             await callback.message.edit_text(
                 await content_manager.aget("start"),
@@ -66,11 +56,29 @@ async def back_to_previous(callback: types.CallbackQuery):
                 parse_mode="markdown"
             )
         else:
-            await callback.message.edit_text(
-                await content_manager.aget(prev_keyboard_key),
-                reply_markup=await keyboard_func(),
-                parse_mode="markdown"
-            )
+            keyboard_func = await get_keyboard_by_key(prev_keyboard_key)
+            if not keyboard_func:
+                await content_manager.clear_keyboard_stack(user_id)
+                await content_manager.push_keyboard(user_id, "start")
+                await callback.message.edit_text(
+                    await content_manager.aget("start"),
+                    reply_markup=await get_start_keyboard(),
+                    parse_mode="markdown"
+                )
+            else:
+                await callback.message.edit_text(
+                    await content_manager.aget(prev_keyboard_key),
+                    reply_markup=await keyboard_func(),
+                    parse_mode="markdown"
+                )
+    except Exception:
+        await content_manager.clear_keyboard_stack(user_id)
+        await content_manager.push_keyboard(user_id, "start")
+        await callback.message.edit_text(
+            await content_manager.aget("start"),
+            reply_markup=await get_start_keyboard(),
+            parse_mode="markdown"
+        )
     await callback.answer()
 
 @router.callback_query(F.data == "scholarships")
