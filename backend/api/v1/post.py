@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, status, Depends, HTTPException
 
-from backend.schema.post import PostCreate, Post, PostUpdate
+from backend.schema.post import PostCreate, Post, PostUpdate, DomainFilter
 from backend.schema.user import User, Role
 from backend.service.post import PostService
 from backend.utils.client.auth.jwt import get_current_user
@@ -14,6 +14,11 @@ router = APIRouter()
 @router.get("", status_code=status.HTTP_200_OK, response_model=list[Post])
 async def get_posts(post_service: Annotated[PostService, Depends()]):
     return await post_service.get_posts()
+
+
+@router.post("/filter", status_code=status.HTTP_200_OK, response_model=list[Post])
+async def get_filtered_posts(domain_filter: DomainFilter, post_service: Annotated[PostService, Depends()]):
+    return await post_service.get_posts_by_domains(domains=domain_filter.domains)
 
 
 @router.post("", status_code=status.HTTP_201_CREATED, response_model=Post)
