@@ -2,20 +2,21 @@ import datetime
 
 from flask_admin.contrib.sqla import ModelView
 from wtforms.fields.choices import SelectMultipleField
+from wtforms.fields.simple import TextAreaField
 
 from backend.schema.base import Domain
 
 
 class PostModelView(ModelView):
     form_excluded_columns = ["views", "comments", "ratings", "created_at", "updated_at", "deleted_at"]
-    column_list = ["content", "media_urls", "domain", "id"]
+    column_list = ["content", "domain", "id"]
     column_labels = {
         "content": "Текст поста",
-        "media_urls": "Медиа-контент",
         "domain": "Академические дисциплины",
     }
     form_overrides = {
-        'domain': SelectMultipleField
+        'domain': SelectMultipleField,
+        'content': TextAreaField
     }
     form_args = {
         'domain': {

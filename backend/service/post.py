@@ -6,6 +6,7 @@ from fastapi.params import Depends
 
 from backend.db import models as db
 from backend.repository.post import PostRepo
+from backend.schema.base import Domain
 from backend.schema.post import Post, PostCreate, PostUpdate
 
 
@@ -16,6 +17,10 @@ class PostService:
     async def get_posts(self) -> list[Post]:
         posts = await self._post_repo.get_posts()
 
+        return [self._build_post(post) for post in posts]
+
+    async def get_posts_by_domains(self, domains: list[Domain]) -> list[Post]:
+        posts = await self._post_repo.get_posts_by_domains(domains)
         return [self._build_post(post) for post in posts]
 
     async def get_post_by_id(self, post_id: UUID) -> Post:
@@ -41,7 +46,6 @@ class PostService:
         return Post(
             id=post.id,
             content=post.content,
-            media_urls=post.media_urls,
             domain=post.domain,
             views=post.views,
         )
