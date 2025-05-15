@@ -9,7 +9,7 @@ async def get_start_keyboard():
         "🔬 Лаборатории": "labs",
         "💼 Проекты и НУГи": "projects",
         "❓ Часто задаваемые вопросы": "faq",
-        "📩 Отправить нам вопрос / Записаться на консультацию": "ask"
+        "📩 Отправить вопрос / Записаться на консультацию": "ask"
     }
     keyboard = [
         [InlineKeyboardButton(text=button["text"], url=button["url"] if button["url"] else None, callback_data=callback_map.get(button["text"]))]
