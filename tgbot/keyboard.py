@@ -9,7 +9,8 @@ async def get_start_keyboard():
         "🔬 Лаборатории": "labs",
         "💼 Проекты и НУГи": "projects",
         "❓ Часто задаваемые вопросы": "faq",
-        "📩 Отправить вопрос / Записаться на консультацию": "ask"
+        "📩 Отправить вопрос / Записаться на консультацию": "ask",
+        "📚 Конференции / Публикации": "conferences",
     }
     keyboard = [
         [InlineKeyboardButton(text=button["text"], url=button["url"] if button["url"] else None, callback_data=callback_map.get(button["text"]))]
@@ -91,6 +92,15 @@ async def get_projects_participation_keyboard():
 
 async def get_nug_keyboard():
     buttons = await content_manager.aget_buttons("nug")
+    keyboard = [
+        [InlineKeyboardButton(text=button["text"], url=button["url"])]
+        for button in buttons
+    ]
+    keyboard.append([InlineKeyboardButton(text="Назад", callback_data="back")])
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+async def get_conferences_keyboard():
+    buttons = await content_manager.aget_buttons("conferences")
     keyboard = [
         [InlineKeyboardButton(text=button["text"], url=button["url"])]
         for button in buttons

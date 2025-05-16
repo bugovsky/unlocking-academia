@@ -13,7 +13,8 @@ class TgBotButtonsView(BaseView):
             "active_scholarships",
             "archive_scholarships",
             "projects_participation",
-            "nug"
+            "nug",
+            "conferences",
         }
         keyboards = [
             {
