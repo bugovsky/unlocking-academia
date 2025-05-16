@@ -75,6 +75,11 @@ CONTENT_INFO = {
         context="Ответ на кнопку '📩 Отправить вопрос / Записаться на консультацию'",
         default="Если ты не нашел интересующей тебя информации..."
     ),
+    "conferences": ContentInfo(
+        name="Конференции / Публикации",
+        context="Ответ на кнопку '📚 Конференции / Публикации'",
+        default="Информация о научных конференциях и возможностях публикации..."
+    ),
     "unknown_command": ContentInfo(
         name="Неизвестная команда",
         context="Сообщение при вводе неизвестной команды",
@@ -92,7 +97,8 @@ KEYBOARD_INFO = {
             {"text": "🔬 Лаборатории", "url": None},
             {"text": "💼 Проекты и НУГи", "url": None},
             {"text": "❓ Часто задаваемые вопросы", "url": None},
-            {"text": "📩 Отправить вопрос / Записаться на консультацию", "url": "http://10.0.191.103:5173/request"}
+            {"text": "📚 Конференции / Публикации", "url": None},
+            {"text": "📩 Отправить вопрос / Записаться на консультацию", "url": "http://10.0.191.103:5173/request"},
         ]
     ),
     "scholarships": KeyboardInfo(
@@ -170,7 +176,14 @@ KEYBOARD_INFO = {
             {"text": "Финансирование", "url": "https://www.hse.ru/science/scifund/nug/financing"},
             {"text": "Конкурс", "url": "https://www.hse.ru/science/scifund/nug/"}
         ]
-    )
+    ),
+    "conferences": KeyboardInfo(
+        name="Конференции / Публикации",
+        context="Кнопки меню конференций и публикаций",
+        default=[
+            {"text": "Список конференций", "url": "https://www.hse.ru/science"}
+        ]
+    ),
 }
 
 class ContentManager:
@@ -215,13 +228,17 @@ class ContentManager:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
         buttons_json = self._client.get(redis_key)
         buttons = json.loads(buttons_json) if buttons_json else []
-        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+        if keyboard_key in {
+            "mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug", "conferences"
+        }:
             return [btn for btn in buttons if btn.get("url")]
         return buttons
 
     def set_buttons(self, keyboard_key: str, buttons: list[dict[str, str]]) -> None:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
-        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+        if keyboard_key in {
+            "mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug", "conferences"
+        }:
             valid_buttons = [btn for btn in buttons if btn.get("url")]
         else:
             valid_buttons = buttons
@@ -231,7 +248,9 @@ class ContentManager:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
         buttons_json = await self._async_client.get(redis_key)
         buttons = json.loads(buttons_json) if buttons_json else []
-        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+        if keyboard_key in {
+            "mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug", "conferences"
+        }:
             result = [btn for btn in buttons if btn.get("url")]
         else:
             result = buttons
@@ -239,7 +258,9 @@ class ContentManager:
 
     async def aset_buttons(self, keyboard_key: str, buttons: list[dict[str, str]]) -> None:
         redis_key = f"{self.BUTTONS_KEY_PREFIX}{keyboard_key}"
-        if keyboard_key in {"mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug"}:
+        if keyboard_key in {
+            "mobility", "labs", "active_scholarships", "archive_scholarships", "projects_participation", "nug", "conferences"
+        }:
             valid_buttons = [btn for btn in buttons if btn.get("url")]
         else:
             valid_buttons = buttons

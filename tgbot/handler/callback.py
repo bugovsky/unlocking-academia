@@ -12,6 +12,7 @@ from tgbot.keyboard import (
     get_projects_participation_keyboard,
     get_nug_keyboard,
     get_back_to_start_keyboard,
+    get_conferences_keyboard,
 )
 
 router = Router()
@@ -28,6 +29,7 @@ async def get_keyboard_by_key(key: str):
         "archive_scholarships": get_archive_scholarships_keyboard,
         "projects_participation": get_projects_participation_keyboard,
         "nug": get_nug_keyboard,
+        "conferences": get_conferences_keyboard,
     }
     return keyboard_map.get(key)
 
@@ -192,5 +194,15 @@ async def ask_question(callback: types.CallbackQuery):
     await callback.message.answer(
         await content_manager.aget("ask"),
         reply_markup=await get_back_to_start_keyboard()
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == "conferences")
+async def conferences(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
+    await content_manager.push_keyboard(user_id, "conferences")
+    await callback.message.edit_text(
+        await content_manager.aget("conferences"),
+        reply_markup=await get_conferences_keyboard()
     )
     await callback.answer()
